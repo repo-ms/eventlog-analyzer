@@ -1,4 +1,5 @@
 from Evtx.Evtx import Evtx
+from detector import get_severity
 from event_map import EVENT_MAP
 import xml.etree.ElementTree as ET
 
@@ -17,6 +18,7 @@ with Evtx(LOG_PATH) as log:
             meaning = EVENT_MAP.get(event_id, "Unknown")
             time_node = root.find(".//e:TimeCreated", namespace)
             event_time = time_node.attrib.get("SystemTime") if time_node is not None else "Unknown Time"
-            print(event_time, event_id, meaning)
+            severity = get_severity(event_id)
+            print(f"[{severity}] {event_time} | {event_id} | {meaning}")
         if i >= 9:
             break
